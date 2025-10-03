@@ -3,13 +3,15 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>HTML Games — Dark Mode</title>
+		<title>Online Games</title>
 		<style>
 			:root{
 				--bg:#0b0f12;
 				--card:#0f1619;
 				--muted:#9aa6ad;
 				--accent:#7bd389;
+				--accent-orange: #ff9b4a;
+				--accent-orange-2: #ff7a1a;
 				--glass: rgba(255,255,255,0.03);
 				--glass-2: rgba(255,255,255,0.02);
 			}
@@ -65,12 +67,33 @@
 				border-radius:12px;
 				border:1px solid rgba(255,255,255,0.03);
 				box-shadow: 0 6px 18px rgba(2,8,12,0.6);
-				transition:transform .12s, box-shadow .12s, border-color .12s;
+				/* hint to browser for smoother animations */
+				will-change: transform, box-shadow;
+				/* calm, slightly longer easing for a gentle feel */
+				transition: transform .28s cubic-bezier(.16,.8,.24,1), box-shadow .28s cubic-bezier(.16,.8,.24,1), border-color .28s;
 			}
 			.card:hover{
-				transform:translateY(-4px);
-				box-shadow: 0 12px 30px rgba(2,8,12,0.7);
-				border-color: rgba(123,211,137,0.12);
+				/* subtle lift + tiny scale for a calm hover */
+				transform: translateY(-6px) scale(1.01);
+				box-shadow: 0 18px 40px rgba(2,8,12,0.65);
+				border-color: rgba(123,211,137,0.10);
+			}
+			.card:active{
+				/* slight feedback on click/tap */
+				transform: translateY(-2px) scale(0.995);
+				transition: transform .12s;
+			}
+			.card:focus-visible{
+				outline: none;
+				box-shadow: 0 18px 40px rgba(2,8,12,0.65), 0 0 0 6px rgba(123,211,137,0.06);
+				transform: translateY(-6px) scale(1.01);
+			}
+			@media (prefers-reduced-motion: reduce){
+				.card, .card:hover, .card:active, .card:focus-visible{
+					transition: none !important;
+					transform: none !important;
+					box-shadow: 0 6px 18px rgba(2,8,12,0.6) !important;
+				}
 			}
 			.thumb{
 				width:84px;
@@ -101,14 +124,28 @@
 			.actions{
 				margin-left:auto;
 			}
+			/* make the whole card act like a clean link (no blue underline) */
+			a.card{
+				color:inherit; /* preserve title color */
+				text-decoration:none;
+				display:flex;
+				align-items:center;
+				gap:14px;
+			}
 			a.play{
 				text-decoration:none;
 				display:inline-block;
 				padding:8px 12px;
 				border-radius:8px;
-				background:linear-gradient(180deg,var(--accent), #59b76a);
-				color:#042217;
+				background: linear-gradient(180deg, var(--accent-orange), var(--accent-orange-2));
+				color: #221205; /* dark text on light orange */
 				font-weight:700;
+				box-shadow: 0 6px 14px rgba(255,120,40,0.12);
+				transition: transform .18s cubic-bezier(.2,.9,.3,1), box-shadow .18s;
+			}
+			a.card .play:hover, a.card .play:focus{
+				transform: translateY(-2px);
+				box-shadow: 0 10px 20px rgba(255,120,40,0.16);
 			}
 			.empty{
 				margin-top:36px;
@@ -123,7 +160,7 @@
 	</head>
 	<body>
 		<header>
-			<h1>HTML Games</h1>
+			<h1>Online Games (Some Games may be blocked)</h1>
 			<div class="search-wrap">
 				<input id="search" class="search" placeholder="Search games (type to filter)" aria-label="Search games">
 			</div>
@@ -142,13 +179,12 @@
 		<script>
 			// Embedded list of top-level folders/files to render as links
 			const games = [
-				"1","10-minutes-till-dawn","100ng","1v1lol","1v1space","2020-game","2048","2048-multitask","8ball-billards-classic","9007199254740992","DogeMiner","FullScreenMario","HexGL","OfflineParadise","Squid Gun Fest","Stickman-Survival","achievementunlocked","adarkroom","adrenalinechallenge","age-of-war","alien-invaders-io","alienhominid","align-4","among-us","angry-birds","anti-terrorist-rush","arcade-wizard","asciispace","aspiring-artist","asteroids","astray","avalanche","awesome-tanks-2","backcountry","backflip-dive-3d","backrooms","bad-ice-cream","bad-ice-cream-2","bad-ice-cream-3","baldis-basics","basket-bros-io","basketball-io","basketball-legends-2020","basketball-stars","battleforgondor","bigredbutton","binding-of-isaac","bitlife","blacholesquare","blackholesquare","blackknight","blocky-snakes","bloonstd","bloonstd2","bloxors","bounceback","boxel-rebound","boxhead2play","brave-explorers","breakingthebank","breaklock","breakout","btd4","btts","burning-man-2","cannon-basketball-4","canyondefense","captaincallisto","cars-simulator","cell-machine","championarcher","chess","chill-radio","chromaincident","chrome-dino","chromedino","circlo","city-blocks-2","clean-up-io","cluster-rush","color-switch-2-challenges","connect3","cookie-clicker","cookieclicker","core-ball","craftmine","creativekillchamber","crossyroad","crowd city 2","csgo-clicker","ctr","ctr-holiday","ctr-tr","cubefield","cupcake2048","cuttherope","cuttherope2","dadish","dadish3","dadishtwo","dante","deal-or-no-deal","death-run-3d","death-soul","deathrun","defend-the-tank","dino","doctor-acorn2","dodge","doge-miner-2","doge-mining-simulator","doge2048","dont-drop-the-white-ball-2","doodle-jump","doublewires","douchebag-workout-2","dragon-vs-bricks","draw-the-hill","drive-mad","duck-life-treasurehunt","ducklife","ducklife1","ducklife2","ducklife3","ducklife4","duke-dashington-remastered","dungeon-craft","edge-surf","edgenotfound","elastic-face","elasticman","emulator-js","endlesswar3","escapingtheprison","evil-glitch","evilglitch","evolution","exo","factory-balls-forever","factoryballs","factoryballsforever","fake-virus","fancypantsadventures","fbwg","finns-fantastic-food-machine","fireboywatergirlforesttemple","fireice","firewater","flappy-2048","flappy-bird","flappy-defense","flappybird","flashtetris","flippy-fish","flood-runner-2","fridaynightfunkin","friendlyfire","froggys-battle","fruitninja","frying-nemo","game-inside","generic-fishing-game","geodash","geodash-2","geometry_jump_sketchy","geometrydash","georgeandtheprinter","getaway-shootout","getting-over-it","gimme-the-airpod","glass-city","go-ball","golf","goodnight","google-snake","google-solitaire","gopher","gravity-soccer","green","greybox","grindcraft","grow-in-the-hole","gun-mayhem","gun-mayhem-2","gun-mayhem-redux","gunspin","hackertype","happy-hop","happy-wheels","hba","helicopter","helios","hexempire","hextris","house-of-hazards","icys-purple-head","idle-breakout","idle-shark","impossiblequiz","index.html","interactivebuddy","iscribble-io","jelly-truck","jetpack","jimothy-piggerton","just-one-boss","justfall","kart-fight-io","kitchen-gun-game","kittencannon","klocki","konnekt","krunker","learntofly","learntofly2","line-rider","linquest","madalin-stunt-cars-2","madalin-stunt-cars-3","makeitmeme","mario","marvinspectrum","matrixrampage","mc1.5.2","mcbeta0.30","mcbeta1.3","meat-boy","meme2048","minecraft","minecraft-classic","minecraftbeta","minesweeper","mini-stilts","miniputt","missiles","moto-x3m-2","moto-x3m-pool-party","motox3m","motox3m-pool","motox3m-spooky","motox3m-winter","motox3m-winter","motox3m2","motox3mwinter","my-friend-pedro","n-gon","ninja","ninjavsevilcorp","ns-shaft","om-bounce","one-screen-run","one-screen-run-2","osu","ovo","packabunchas","pacman","pacman-fps","pandemic2","papa-louie","papas-burgeria","papas-freezeria","papas-hot-doggeria","papas-pancakeria","papas-pizzeria","papas-sushiria","papas-wingeria","papasburgeria","papaspizzaria","paperio2","papery-planes","particle-clicker","particleclicker","path-finder","pe-noire","pikwip","pixel-cave","pizzeria-simulator","polybranch","popcat-classic","portalflash","precision-client","protektor","push-the-square","push-your-luck","pushback","puzzle-ball","pvz-2","q1k3","racer","radiusraid","retro-bowl","retrobowl","retrohaunt","rise-of-neon-square","roadblocks","rocking-sky-trip","rolling-forests","rolly-vortex","rooftop-snipers","run-3","run3","sand-game","sandboxels","scrambled-eggs","scrapmetal","senya-and-oscar-2","sg","shadow-world-adventure","shards","shift-flash","shift-flash-2","short-life-2","short-ride","shuttledeck","skyblock","sleepingbeauty","slice-of-sasha","slither","slither snake","slope","slope-ball","slope2","sm63","sm64","smashkarts","smokingbarrels","snake","snowbattle","soldier-legend","solitaire","sonic-the-hedgehog","sort-the-court","soundboard","space-company","spacecompany","spacegarden","spacehuggers","spelunky","ssf","stack","stack-bump-3d","station-141","stealingthediamond","stick-archers-battle","stickclimb","stickman","stickman-boost","stickman-dismount","stickman-epic-battle","stickman-golf","stickwar","stormthehouse2","subway-surfers","subway-surfers-bali","super-mario-maker-online","super-puffer-fish-3d","superhero-io","superhot","supermarioconstruct","swerve","synesthesia","tactical-weapon-pack-2","tacticalassasin2","tail-of-the-dragon","tam-indian-truck-simulator-3d","tank-trouble-2","tanuki-sunset","temple-run-2","tetris","the-final-earth","the-final-earth-2","the-impossible-quiz","the-impossible-quiz-2","the-little-giant","thebattle","theheist","themazeofspacegoblins","there-is-no-game","thisistheonlylevel","time-shooter-3","tiny-fishing","tiny-fragments","tiny-islands","topple-adventure","tosstheturtle","tough-growth","towermaster","townscaper","trimps","tube-jumpers","tunnel-rush","tunnelz","tv-static","twitch-tetris","underrun","unfold-2","up-left-out","veloce","vex3","vex4","vex5","vex6","vex7","waterworks","webretro","winter-falling-price","wipo","wolf3d","wordle","worlds-hardest-game","worlds-hardest-game-2","x-trial-racing","xx142-b2exe","yoshifabrication","you-are-bezos","zig-zag","zombocalypse","zombs-royale"
+				"1","10-minutes-till-dawn","100ng","1v1lol","1v1space","2020-game","2048","2048-multitask","8ball-billards-classic","DogeMiner","FullScreenMario","HexGL","OfflineParadise","Squid Gun Fest","Stickman-Survival","achievementunlocked","adarkroom","adrenalinechallenge","age-of-war","alien-invaders-io","alienhominid","align-4","among-us","angry-birds","anti-terrorist-rush","arcade-wizard","asciispace","aspiring-artist","asteroids","astray","avalanche","awesome-tanks-2","backcountry","backflip-dive-3d","backrooms","bad-ice-cream","bad-ice-cream-2","bad-ice-cream-3","baldis-basics","basket-bros-io","basketball-io","basketball-legends-2020","basketball-stars","battleforgondor","bigredbutton","binding-of-isaac","bitlife","blacholesquare","blackholesquare","blackknight","blocky-snakes","bloonstd","bloonstd2","bloxors","bounceback","boxel-rebound","boxhead2play","brave-explorers","breakingthebank","breaklock","breakout","btd4","btts","burning-man-2","cannon-basketball-4","canyondefense","captaincallisto","cars-simulator","cell-machine","championarcher","chess","chill-radio","chromaincident","chrome-dino","chromedino","circlo","city-blocks-2","clean-up-io","cluster-rush","color-switch-2-challenges","connect3","cookie-clicker","cookieclicker","core-ball","craftmine","creativekillchamber","crossyroad","crowd city 2","csgo-clicker","ctr","ctr-holiday","ctr-tr","cubefield","cupcake2048","cuttherope","cuttherope2","dadish","dadish3","dadishtwo","dante","deal-or-no-deal","death-run-3d","death-soul","deathrun","defend-the-tank","dino","doctor-acorn2","dodge","doge-miner-2","doge-mining-simulator","doge2048","dont-drop-the-white-ball-2","doodle-jump","doublewires","douchebag-workout-2","dragon-vs-bricks","draw-the-hill","drive-mad","duck-life-treasurehunt","ducklife","ducklife1","ducklife2","ducklife3","ducklife4","duke-dashington-remastered","dungeon-craft","edge-surf","edgenotfound","elastic-face","elasticman","emulator-js","endlesswar3","escapingtheprison","evil-glitch","evilglitch","evolution","exo","factory-balls-forever","factoryballs","factoryballsforever","fake-virus","fancypantsadventures","fbwg","finns-fantastic-food-machine","fireboywatergirlforesttemple","fireice","firewater","flappy-2048","flappy-bird","flappy-defense","flappybird","flashtetris","flippy-fish","flood-runner-2","fridaynightfunkin","friendlyfire","froggys-battle","fruitninja","frying-nemo","game-inside","generic-fishing-game","geodash","geodash-2","geometry_jump_sketchy","geometrydash","georgeandtheprinter","getaway-shootout","getting-over-it","gimme-the-airpod","glass-city","go-ball","golf","goodnight","google-snake","google-solitaire","gopher","gravity-soccer","green","greybox","grindcraft","grow-in-the-hole","gun-mayhem","gun-mayhem-2","gun-mayhem-redux","gunspin","hackertype","happy-hop","happy-wheels","hba","helicopter","helios","hexempire","hextris","house-of-hazards","icys-purple-head","idle-breakout","idle-shark","impossiblequiz","index.html","interactivebuddy","iscribble-io","jelly-truck","jetpack","jimothy-piggerton","just-one-boss","justfall","kart-fight-io","kitchen-gun-game","kittencannon","klocki","konnekt","krunker","learntofly","learntofly2","line-rider","linquest","madalin-stunt-cars-2","madalin-stunt-cars-3","makeitmeme","mario","marvinspectrum","matrixrampage","mc1.5.2","mcbeta0.30","mcbeta1.3","meat-boy","meme2048","minecraft","minecraft-classic","minecraftbeta","minesweeper","mini-stilts","miniputt","missiles","moto-x3m-2","moto-x3m-pool-party","motox3m","motox3m-pool","motox3m-spooky","motox3m-winter","motox3m-winter","motox3m2","motox3mwinter","my-friend-pedro","n-gon","ninja","ninjavsevilcorp","ns-shaft","om-bounce","one-screen-run","one-screen-run-2","osu","ovo","packabunchas","pacman","pacman-fps","pandemic2","papa-louie","papas-burgeria","papas-freezeria","papas-hot-doggeria","papas-pancakeria","papas-pizzeria","papas-sushiria","papas-wingeria","papasburgeria","papaspizzaria","paperio2","papery-planes","particle-clicker","particleclicker","path-finder","pe-noire","pikwip","pixel-cave","pizzeria-simulator","polybranch","popcat-classic","portalflash","precision-client","protektor","push-the-square","push-your-luck","pushback","puzzle-ball","pvz-2","q1k3","racer","radiusraid","retro-bowl","retrobowl","retrohaunt","rise-of-neon-square","roadblocks","rocking-sky-trip","rolling-forests","rolly-vortex","rooftop-snipers","run-3","run3","sand-game","sandboxels","scrambled-eggs","scrapmetal","senya-and-oscar-2","sg","shadow-world-adventure","shards","shift-flash","shift-flash-2","short-life-2","short-ride","shuttledeck","skyblock","sleepingbeauty","slice-of-sasha","slither","slither snake","slope","slope-ball","slope2","sm63","sm64","smashkarts","smokingbarrels","snake","snowbattle","soldier-legend","solitaire","sonic-the-hedgehog","sort-the-court","soundboard","space-company","spacecompany","spacegarden","spacehuggers","spelunky","ssf","stack","stack-bump-3d","station-141","stealingthediamond","stick-archers-battle","stickclimb","stickman","stickman-boost","stickman-dismount","stickman-epic-battle","stickman-golf","stickwar","stormthehouse2","subway-surfers","subway-surfers-bali","super-mario-maker-online","super-puffer-fish-3d","superhero-io","superhot","supermarioconstruct","swerve","synesthesia","tactical-weapon-pack-2","tacticalassasin2","tail-of-the-dragon","tam-indian-truck-simulator-3d","tank-trouble-2","tanuki-sunset","temple-run-2","tetris","the-final-earth","the-final-earth-2","the-impossible-quiz","the-impossible-quiz-2","the-little-giant","thebattle","theheist","themazeofspacegoblins","there-is-no-game","thisistheonlylevel","time-shooter-3","tiny-fishing","tiny-fragments","tiny-islands","topple-adventure","tosstheturtle","tough-growth","towermaster","townscaper","trimps","tube-jumpers","tunnel-rush","tunnelz","tv-static","twitch-tetris","underrun","unfold-2","up-left-out","veloce","vex3","vex4","vex5","vex6","vex7","waterworks","webretro","winter-falling-price","wipo","wolf3d","wordle","worlds-hardest-game","worlds-hardest-game-2","x-trial-racing","xx142-b2exe","yoshifabrication","you-are-bezos","zig-zag","zombocalypse","zombs-royale"
 			];
 
 			const listEl = document.getElementById('list');
 			const searchInput = document.getElementById('search');
 			const emptyEl = document.getElementById('empty');
-			const countEl = document.getElementById('count');
 
 			function makeCard(name){
 				const url = encodeURI(name.endsWith('/') || name.endsWith('.html') ? name : name + '/');
@@ -157,7 +193,6 @@
 				a.className = 'card';
 				a.setAttribute('role','listitem');
 				a.innerHTML = `
-					<div class="thumb">${escapeInitials(name)}</div>
 					<div class="meta">
 						<div class="title">${escapeHtml(name)}</div>
 						<div class="path">/${escapeHtml(name)}</div>
@@ -180,9 +215,6 @@
 				const q = String(filter||'').trim().toLowerCase();
 				listEl.innerHTML = '';
 				const filtered = games.filter(g=> g.toLowerCase().includes(q));
-				if(filtered.length===0){ emptyEl.hidden = false; countEl.textContent = '0 games'; return; }
-				emptyEl.hidden = true;
-				countEl.textContent = `${filtered.length} game${filtered.length===1?'':'s'}`;
 				const frag = document.createDocumentFragment();
 				for(const name of filtered){ frag.appendChild(makeCard(name)); }
 				listEl.appendChild(frag);
